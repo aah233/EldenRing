@@ -1,54 +1,43 @@
 <template>
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title>Card Title</ion-card-title>
-      <ion-card-subtitle>Card Subtitle</ion-card-subtitle>
-    </ion-card-header>
-    <ion-card-content>
-      <ion-list>
-        <ion-item>
-          <ion-thumbnail slot="start">
-            <img alt="Silhouette of mountains" src="https://ionicframework.com/docs/img/demos/thumbnail.svg" />
-          </ion-thumbnail>
-          <ion-label>Item</ion-label>
-        </ion-item>
+  <ion-menu content-id="main-content">
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Menu Content</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content class="ion-padding">This is the menu content.</ion-content>
+  </ion-menu>
+  <ion-page id="main-content">
+    <ion-header>
+      <ion-toolbar>
+        <ion-buttons slot="start">
+          <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <ion-title>Menu</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content class="ion-padding">
 
-        <ion-item>
-          <ion-thumbnail slot="start">
-            <img alt="Silhouette of mountains" src="https://ionicframework.com/docs/img/demos/thumbnail.svg" />
-          </ion-thumbnail>
-          <ion-label>Item</ion-label>
-        </ion-item>
 
-        <ion-item>
-          <ion-thumbnail slot="start">
-            <img alt="Silhouette of mountains" src="https://ionicframework.com/docs/img/demos/thumbnail.svg" />
-          </ion-thumbnail>
-          <ion-label>Item</ion-label>
-        </ion-item>
-
-        <ion-item lines="none">
-          <ion-thumbnail slot="start">
-            <img alt="Silhouette of mountains" src="https://ionicframework.com/docs/img/demos/thumbnail.svg" />
-          </ion-thumbnail>
-          <ion-label>Item</ion-label>
-        </ion-item>
-      </ion-list>
-    </ion-card-content>
-  </ion-card>
+    </ion-content>
+  </ion-page>
 </template>
 
 <script lang="ts">
-import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle } from '@ionic/vue';
+import { IonButtons, IonContent, IonHeader, IonMenu, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/vue';
 import { defineComponent } from 'vue';
+import { }
 
 export default defineComponent({
-  components: { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle },
+  components: {
+    IonButtons,
+    IonContent,
+    IonHeader,
+    IonMenu,
+    IonMenuButton,
+    IonPage,
+    IonTitle,
+    IonToolbar,
+  },
 });
 </script>
-
-<style scoped>
-ion-item {
-  --padding-start: 0;
-}
-</style>
