@@ -1,43 +1,54 @@
 <template>
-  <ion-menu content-id="main-content">
-    <ion-header>
-      <ion-toolbar>
-        <ion-title>Menu Content</ion-title>
-      </ion-toolbar>
-    </ion-header>
-    <ion-content class="ion-padding">This is the menu content.</ion-content>
-  </ion-menu>
-  <ion-page id="main-content">
-    <ion-header>
-      <ion-toolbar>
-        <ion-buttons slot="start">
-          <ion-menu-button></ion-menu-button>
-        </ion-buttons>
-        <ion-title>Menu</ion-title>
-      </ion-toolbar>
-    </ion-header>
-    <ion-content class="ion-padding">
+  <ion-list>
+    <!-- The reorder gesture is disabled by default, enable it to drag and drop items -->
+    <ion-reorder-group :disabled="false" @ionItemReorder="handleReorder($event)">
+      <ion-item>
+        <ion-label> Item 1 </ion-label>
+        <ion-reorder slot="end"></ion-reorder>
+      </ion-item>
 
+      <ion-item>
+        <ion-label> Item 2 </ion-label>
+        <ion-reorder slot="end"></ion-reorder>
+      </ion-item>
 
-    </ion-content>
-  </ion-page>
+      <ion-item>
+        <ion-label> Item 3 </ion-label>
+        <ion-reorder slot="end"></ion-reorder>
+      </ion-item>
+
+      <ion-item>
+        <ion-label> Item 4 </ion-label>
+        <ion-reorder slot="end"></ion-reorder>
+      </ion-item>
+
+      <ion-item>
+        <ion-label> Item 5 </ion-label>
+        <ion-reorder slot="end"></ion-reorder>
+      </ion-item>
+    </ion-reorder-group>
+  </ion-list>
 </template>
 
 <script lang="ts">
-import { IonButtons, IonContent, IonHeader, IonMenu, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/vue';
+import { IonItem, IonLabel, IonList, IonReorder, IonReorderGroup } from '@ionic/vue';
 import { defineComponent } from 'vue';
-import { }
 
 export default defineComponent({
-  components: {
-    IonButtons,
-    IonContent,
-    IonHeader,
-    IonMenu,
-    IonMenuButton,
-    IonPage,
-    IonTitle,
-    IonToolbar,
+  components: { IonItem, IonLabel, IonList, IonReorder, IonReorderGroup },
+  setup() {
+    const handleReorder = (event: CustomEvent) => {
+      // The `from` and `to` properties contain the index of the item
+      // when the drag started and ended, respectively
+      console.log('Dragged from index', event.detail.from, 'to', event.detail.to);
+
+      // Finish the reorder and position the item in the DOM based on
+      // where the gesture ended. This method can also be called directly
+      // by the reorder group
+      event.detail.complete();
+    };
+
+    return { handleReorder };
   },
 });
 </script>
