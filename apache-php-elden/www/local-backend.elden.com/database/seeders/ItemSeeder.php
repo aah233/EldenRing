@@ -16,13 +16,13 @@ class ItemSeeder extends Seeder
             // Realiza la solicitud a la API
             $response = $client->request('GET', 'https://eldenring.fanapis.com/api/items?limit=462');
             $items = json_decode($response->getBody()->getContents(), true);
-
+            $id = 1;
             // Verifica si la respuesta contiene 'data'
             if (isset($items['data'])) {
                 foreach ($items['data'] as $item) {
                     // Inserta cada ítem en la base de datos
                     Item::create([
-                        'id'           => $item['id'],
+                        'id'           => $id++,
                         'name'         => $item['name'],
                         'image'        => $item['image'] ?? null, // Asume que estos campos pueden ser opcionales
                         'description'  => $item['description'] ?? null,
