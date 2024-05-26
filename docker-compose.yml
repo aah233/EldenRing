@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  https-portal:
+    image: steveltn/https-portal:1
+    ports:
+      - '443:443'
+    environment:
+      DOMAINS: |
+        local-backend.elden.com -> http://apache-php-elden:80
+      STAGE: 'local'
+    volumes:
+      - ./https-portal-data:/var/lib/https-portal
+    networks:
+      - local-network
+ 
+  apache-php-elden:
+    build: './apache-php-elden/'
+    container_name: apache-php-elden
+    volumes:
+      - ./apache-php-elden/www:/var/www/html
+      - ./apache-php-elden/apache/virtualhosts:/etc/apache2/sites-enabled/
+    networks:
+      - local-network
+    command:
+      - apache2-foreground
+
+networks:
+  local-network:
+    external: true
+
