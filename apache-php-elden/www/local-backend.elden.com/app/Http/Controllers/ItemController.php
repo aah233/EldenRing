@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Item;
 use Illuminate\Http\Request;
+use PhpParser\Node\Expr\Cast\String_;
 
 class ItemController extends Controller
 {
@@ -34,9 +35,13 @@ class ItemController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+        $item = Item::findOrFail($id);
+        $item->name = $request->name;
+        $item->save();
+
+        return response()->json(['message' => 'Item updated successfully'], 200);
     }
 
     /**

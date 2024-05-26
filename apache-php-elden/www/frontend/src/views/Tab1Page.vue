@@ -11,7 +11,7 @@
           <p>{{ item.description }}</p>
         </ion-label>
         <ion-reorder slot="end"></ion-reorder>
-        <ion-button slot="end" @click="editItem(index)">Editar</ion-button>
+        <ion-button slot="end" @click="editItem(index)">Edit</ion-button>
       </ion-item>
     </ion-reorder-group>
 
@@ -20,18 +20,18 @@
       <ion-content>
         <ion-header>
           <ion-toolbar>
-            <ion-title>Editar Item</ion-title>
+            <ion-title>Edit Item</ion-title>
             <ion-buttons slot="end">
-              <ion-button @click="closeEditModal">Cerrar</ion-button>
+              <ion-button @click="closeEditModal">Close</ion-button>
             </ion-buttons>
           </ion-toolbar>
         </ion-header>
         <ion-content>
           <ion-item>
-            <ion-label position="floating">Nombre</ion-label>
+            <ion-label position="floating">Name</ion-label>
             <ion-input v-model="editableItem.name"></ion-input>
           </ion-item>
-          <ion-button expand="full" @click="saveEdit">Guardar</ion-button>
+          <ion-button expand="full" @click="saveEdit">Save</ion-button>
         </ion-content>
       </ion-content>
     </ion-modal>
@@ -48,7 +48,7 @@ export default defineComponent({
   setup() {
     const items = ref([]);
     const isEditModalOpen = ref(false);
-    const editableItem = ref({ name: '', index: -1 });
+    const editableItem = ref({ id: '', name: '', index: -1 });
 
     const fetchItems = async () => {
       try {
@@ -67,7 +67,8 @@ export default defineComponent({
     };
 
     const editItem = (index: number) => {
-      editableItem.value = { ...items.value[index], index };
+      const item = items.value[index];
+      editableItem.value = { id: item.id, name: item.name, index };
       isEditModalOpen.value = true;
     };
 
@@ -75,13 +76,19 @@ export default defineComponent({
       isEditModalOpen.value = false;
     };
 
-    const saveEdit = () => {
+    const saveEdit = async () => {
       const index = editableItem.value.index;
       if (index !== -1) {
-        items.value[index].name = editableItem.value.name;
-        // Aquí puedes hacer una petición para guardar los cambios en el servidor si es necesario
+        try {
+          await axios.put(`https://local-backend.elden.com/api/items/${editableItem.value.id}`, {
+            name: editableItem.value.name
+          });
+          items.value[index].name = editableItem.value.name;
+          closeEditModal();
+        } catch (error) {
+          console.error('Error updating item:', error);
+        }
       }
-      closeEditModal();
     };
 
     fetchItems();
