@@ -11,20 +11,44 @@
           <p>{{ item.description }}</p>
         </ion-label>
         <ion-reorder slot="end"></ion-reorder>
+        <ion-button slot="end" @click="editItem(index)">Editar</ion-button>
       </ion-item>
     </ion-reorder-group>
+
+    <!-- Edit Modal -->
+    <ion-modal :is-open="isEditModalOpen" @did-dismiss="closeEditModal">
+      <ion-content>
+        <ion-header>
+          <ion-toolbar>
+            <ion-title>Editar Item</ion-title>
+            <ion-buttons slot="end">
+              <ion-button @click="closeEditModal">Cerrar</ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
+        <ion-content>
+          <ion-item>
+            <ion-label position="floating">Nombre</ion-label>
+            <ion-input v-model="editableItem.name"></ion-input>
+          </ion-item>
+          <ion-button expand="full" @click="saveEdit">Guardar</ion-button>
+        </ion-content>
+      </ion-content>
+    </ion-modal>
   </ion-list>
 </template>
 
 <script lang="ts">
-import { IonItem, IonLabel, IonList, IonReorder, IonReorderGroup, IonThumbnail } from '@ionic/vue';
-import { defineComponent, ref, onMounted } from 'vue';
+import { IonItem, IonLabel, IonList, IonReorder, IonReorderGroup, IonThumbnail, IonButton, IonModal, IonContent, IonHeader, IonToolbar, IonTitle, IonButtons, IonInput } from '@ionic/vue';
+import { defineComponent, ref } from 'vue';
 import axios from 'axios';
 
 export default defineComponent({
-  components: { IonItem, IonLabel, IonList, IonReorder, IonReorderGroup, IonThumbnail },
+  components: { IonItem, IonLabel, IonList, IonReorder, IonReorderGroup, IonThumbnail, IonButton, IonModal, IonContent, IonHeader, IonToolbar, IonTitle, IonButtons, IonInput },
   setup() {
     const items = ref([]);
+    const isEditModalOpen = ref(false);
+    const editableItem = ref({ name: '', index: -1 });
 
     const fetchItems = async () => {
       try {
@@ -37,19 +61,32 @@ export default defineComponent({
 
     const handleReorder = (event: CustomEvent) => {
       console.log('Dragged from index', event.detail.from, 'to', event.detail.to);
-      // Update the items array based on the reorder event
       const movedItem = items.value.splice(event.detail.from, 1)[0];
       items.value.splice(event.detail.to, 0, movedItem);
-
-      // Finish the reorder
       event.detail.complete();
     };
 
-    onMounted(() => {
-      fetchItems();
-    });
+    const editItem = (index: number) => {
+      editableItem.value = { ...items.value[index], index };
+      isEditModalOpen.value = true;
+    };
 
-    return { items, handleReorder };
+    const closeEditModal = () => {
+      isEditModalOpen.value = false;
+    };
+
+    const saveEdit = () => {
+      const index = editableItem.value.index;
+      if (index !== -1) {
+        items.value[index].name = editableItem.value.name;
+        // Aquí puedes hacer una petición para guardar los cambios en el servidor si es necesario
+      }
+      closeEditModal();
+    };
+
+    fetchItems();
+
+    return { items, isEditModalOpen, editableItem, handleReorder, editItem, closeEditModal, saveEdit };
   },
 });
 </script>
